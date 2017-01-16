@@ -29,41 +29,24 @@ namespace ItechSupEDT.Ajout_UC
         public AjoutPromotion()
         {
             InitializeComponent();
+            this.DataContext = this;
 
             this.cb_lstFormations.ItemsSource = FormationDAO.ListerFormation();
+            
         }
 
-        private void btn_ajoutPromotion_click(object sender, RoutedEventArgs e)
+        private void btn_ajoutPromotion_Click(object sender, RoutedEventArgs e)
         {
-
+            
             String nom = tb_nomPromotion.Text;
             DateTime dateDebutPromotion = dp_dateDebutPromotion.DisplayDate;
             DateTime dateFinPromotion = dp_dateFinPromotion.DisplayDate;
-            
+            //this.DataContext = cb_lstFormations.SelectedItem;
+            Formation selectedFormation = (Formation)cb_lstFormations.SelectedItem;
 
-            try
-            {
-                try
-                {
-                    
+            int id_formation = selectedFormation.Id;
 
-                    this.tbk_retourMessage.Text = "Formateur ajouté";
-
-                    tb_nomFormateur.Clear();
-                    tb_mailFormateur.Clear();
-                    tb_prenomFormateur.Clear();
-                    tb_telephoneFormateur.Clear();
-                    
-                }
-                catch (Formateur.FormateurException error)
-                {
-                    tbk_errorMessage.Text = error.Message;
-                }
-            }
-            catch (Exception)
-            {
-                tbk_errorMessage.Text = "Désolé, une erreur est survenu lors de l'ajout de la promotion, veuillez vérifier les informations renseignées et recommencer.";
-            }
+            PromotionDAO.CreerPromotion(nom, dateDebutPromotion, dateFinPromotion, id_formation);
         }
     }
 }

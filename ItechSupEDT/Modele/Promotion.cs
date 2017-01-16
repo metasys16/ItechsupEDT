@@ -44,9 +44,8 @@ namespace ItechSupEDT.Modele
             get { return this.lstSessions; }
             set { this.lstSessions = value; }
         }
-        public Promotion(int id, String _nom, DateTime _dateDebut, DateTime _dateFin)
+        public Promotion(int id, String _nom, DateTime _dateDebut, DateTime _dateFin, int id_formation)
         {
-            
             this.Nom = _nom;
             this.DateDebut = _dateDebut;
             this.DateFin = _dateFin;
