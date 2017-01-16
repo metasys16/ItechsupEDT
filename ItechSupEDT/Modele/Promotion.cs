@@ -44,18 +44,12 @@ namespace ItechSupEDT.Modele
             get { return this.lstSessions; }
             set { this.lstSessions = value; }
         }
-        public Promotion(String _nom, DateTime _dateDebut, DateTime _dateFin, List<Eleve> _lstEleves, Formation _formation)
+        public Promotion(int id, String _nom, DateTime _dateDebut, DateTime _dateFin)
         {
-            if (_lstEleves.Count < 2)
-            {
-                throw new PromotionException("Une promotion doit avoir au moins deux élèves");
-            }
+            
             this.Nom = _nom;
             this.DateDebut = _dateDebut;
             this.DateFin = _dateFin;
-            this.Formation = _formation;
-            this.LstSessions = new List<Session>();
-            this.LstEleves = _lstEleves;
         }
         public void AddEleve(Eleve eleve)
         {

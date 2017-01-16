@@ -20,6 +20,7 @@
         </StackPanel>
         <StackPanel Margin="5">
             <Button x:Name="btn_ajoutFormation" Content="Ajouter" Width="100" Click="btn_ajoutFormation_Click"/>
+            <TextBlock x:Name="tbk_retourMessage" HorizontalAlignment="Center" Margin="10,10,10,0"/>
         </StackPanel>
     </StackPanel>
 </UserControl>

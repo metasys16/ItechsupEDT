@@ -13,6 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ItechSupEDT.Modele;
+using System.Data.SqlClient;
+using ItechSupEDT.Outils;
+using System.Data;
 
 namespace ItechSupEDT.Ajout_UC
 {
@@ -21,44 +24,38 @@ namespace ItechSupEDT.Ajout_UC
     /// </summary>
     public partial class AjoutMatiere : UserControl
     {
-
-        private List<Matiere> lstMatiere;
-        public List<Matiere> LstMatiere
-        {
-            get { return this.lstMatiere; }
-            set { this.lstMatiere = value; }
-        }
-
         public AjoutMatiere()
         {
             InitializeComponent();
-            this.LstMatiere = new List<Matiere>();
-            this.sp_valider.Visibility = Visibility.Collapsed;
         }
 
         private void btn_valider_Click(object sender, RoutedEventArgs e)
         {
-            if (this.tb_nomMatiere.Text == "")
+            String nom = tb_nomMatiere.Text;
+
+            try
             {
-                this.tbk_error.Text = "Le nom de la matière est vide.";
-                this.tbk_error.Visibility = Visibility.Visible;
-                return;
+                if (tb_nomMatiere.Text.Count() > 1)
+                {
+                    MatiereDAO.CreerMatiere(nom);
+                    this.tbk_retourMessage.Text = "Matiere ajoutée";
+                    // Effacer les saisies pour en saisir d'autres à la suite
+                    tb_nomMatiere.Clear();
+                }
+                else
+                {
+                    tbk_errorMessage.Text = "Veuillez renseigner un nom de Matiere d'au moins deux caractères svp";
+                }
+               
             }
-            if (tbk_error.Text != "")
+            catch (Matiere.MatiereException error)
             {
-                this.tbk_error.Text = "";
-                this.tbk_error.Visibility = Visibility.Collapsed;
+                tbk_errorMessage.Text = error.Message;
             }
-            this.LstMatiere.Add(new Matiere(this.tb_nomMatiere.Text));
-            this.tb_nomMatiere.Text = "";
-            this.tbk_retourMessage.Text = "Matière Ajoutée";
-            this.sp_Ajout.Visibility = Visibility.Collapsed;
-            this.sp_valider.Visibility = Visibility.Visible;
-        }
-        private void btn_nouveau_Click(object sender, RoutedEventArgs e)
-        {
-            this.sp_valider.Visibility = Visibility.Collapsed;
-            this.sp_Ajout.Visibility = Visibility.Visible;
+            catch (Exception)
+            {
+                tbk_errorMessage.Text = "Désolé, une erreur est survenu lors de l'ajout de la matière, veuillez vérifier les informations renseignées et recommencer.";
+            }
         }
     }
 }

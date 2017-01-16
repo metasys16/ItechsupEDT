@@ -14,6 +14,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ItechSupEDT.Modele;
 using ItechSupEDT.Ajout_UC;
+using System.Data.SqlClient;
+using ItechSupEDT.Outils;
+using System.Data;
+using System.Collections.ObjectModel;
 
 namespace ItechSupEDT.Ajout_UC
 {
@@ -22,28 +26,44 @@ namespace ItechSupEDT.Ajout_UC
     /// </summary>
     public partial class AjoutPromotion : UserControl
     {
-        private Dictionary<String, Formation> lstFormations;
-        public Dictionary<String, Formation> LstFormations
-        {
-            get { return this.lstFormations; }
-            set { this.lstFormations = value; }
-        }
-        public AjoutPromotion(List<Formation> _lstFormations, List<MultiSelectedObject> _lstEleve)
+        public AjoutPromotion()
         {
             InitializeComponent();
 
-            this.LstFormations = new Dictionary<string, Formation>();
-            if (_lstFormations.Count > 0)
+            this.cb_lstFormations.ItemsSource = FormationDAO.ListerFormation();
+        }
+
+        private void btn_ajoutPromotion_click(object sender, RoutedEventArgs e)
+        {
+
+            String nom = tb_nomPromotion.Text;
+            DateTime dateDebutPromotion = dp_dateDebutPromotion.DisplayDate;
+            DateTime dateFinPromotion = dp_dateFinPromotion.DisplayDate;
+            
+
+            try
             {
-                foreach (Formation formation in _lstFormations)
+                try
                 {
-                    this.LstFormations.Add(formation.Nom, formation);
+                    
+
+                    this.tbk_retourMessage.Text = "Formateur ajouté";
+
+                    tb_nomFormateur.Clear();
+                    tb_mailFormateur.Clear();
+                    tb_prenomFormateur.Clear();
+                    tb_telephoneFormateur.Clear();
+                    
                 }
-                this.cb_lstFormations.ItemsSource = this.LstFormations.Keys;
-                this.cb_lstFormations.SelectedIndex = 0;
+                catch (Formateur.FormateurException error)
+                {
+                    tbk_errorMessage.Text = error.Message;
+                }
             }
-            MutliSelectPickList multiSelect = new MutliSelectPickList(_lstEleve);
-            this.MultiSelect.Content = multiSelect;
+            catch (Exception)
+            {
+                tbk_errorMessage.Text = "Désolé, une erreur est survenu lors de l'ajout de la promotion, veuillez vérifier les informations renseignées et recommencer.";
+            }
         }
     }
 }

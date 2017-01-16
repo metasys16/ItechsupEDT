@@ -13,6 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ItechSupEDT.Modele;
+using System.Data.SqlClient;
+using System.Data;
+using ItechSupEDT.Outils;
 
 namespace ItechSupEDT.Ajout_UC
 {
@@ -30,23 +33,33 @@ namespace ItechSupEDT.Ajout_UC
         {
             String nom = tb_nomFormation.Text;
             String nbHeures = tb_dureeFormation.Text;
+
             try
             {
-                float duree = Single.Parse(nbHeures);
-                try
+                float duree = float.Parse(nbHeures);
+                // validation
+                if (tb_nomFormation.Text.Count() > 1)
                 {
-                    //Formation formation = new Formation(nom, duree, lstMatiere);
+                    FormationDAO.CreerFormation(nom, duree);
+                    this.tbk_retourMessage.Text = "Formation ajoutée";
+                    // Effacer les saisies pour en saisir d'autres à la suite
+                    tb_nomFormation.Clear();
+                    tb_dureeFormation.Clear();
                 }
-                catch(Formation.FormationException error)
+                else
                 {
-                    tbk_errorMessage.Text = error.Message;
-                }       
+                    tbk_errorMessage.Text = "Veuillez renseigner un nom de Formation d'au moins deux caractères svp";
+                }
+            }
+            catch (Formation.FormationException error)
+            {
+                tbk_errorMessage.Text = error.Message;       
             }
             catch(Exception)
             {
                 tbk_errorMessage.Text = "Désolé, une erreur est survenu lors de l'ajout de la formation, veuillez vérifier les informations renseignées et recommencer.";
             }
-            
+
         }
     }
 }
